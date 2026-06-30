@@ -522,7 +522,7 @@ function refreshStatus() {
 
 function updateDashboard() {
   const pd = DATA['공공데이터 제공'], db = DATA['데이터기반행정'];
-  const ps = calcStats(pd), ds = calcStats(db);
+  const ps = stats(pd), ds = stats(db);
   document.getElementById('kpi-done').textContent  = ps.done+ds.done;
   document.getElementById('kpi-done-s').textContent = '공공데이터 '+ps.done+' · 데이터기반행정 '+ds.done;
   document.getElementById('kpi-part').textContent  = ps.part+ds.part;
@@ -594,13 +594,19 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('db-pp').textContent=ds.part;
   document.getElementById('db-pn').textContent=ds.none;
 
+  // 1. 먼저 내장 데이터로 대시보드 즉시 표시
+  updateDashboard();
+  rebuildTable();
+
+  // 2. 그 다음 구글 시트 연동 시도 (실패해도 대시보드는 유지)
   loadStatusFromSheets().then(ok => {
-    updateDashboard();
-    rebuildTable();
-    if(ok) showToast('✅ 구글 시트에서 최신 현황 로드됨');
+    if(ok) {
+      updateDashboard();
+      rebuildTable();
+      showToast('✅ 구글 시트에서 최신 현황 로드됨');
+    }
   }).catch(() => {
-    updateDashboard();
-    rebuildTable();
+    console.warn('시트 연동 실패 - 내장 데이터 사용');
   });
 
   const pc=typeCount(pd), dc=typeCount(db);
