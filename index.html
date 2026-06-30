@@ -464,16 +464,19 @@ function typeCount(groups){
 
 
 // ── Google Sheets 실시간 연동 ──────────────────────────────────
-const SHEET_URLS = {
-  '공공데이터 제공': 'https://docs.google.com/spreadsheets/d/1EiAb2iiep8jiKtt4Wd0HPQlW4s7ssMm5/export?format=csv&gid=0',
-  '데이터기반행정':  'https://docs.google.com/spreadsheets/d/1EiAb2iiep8jiKtt4Wd0HPQlW4s7ssMm5/export?format=csv&gid=1'
-};
+function getSheetUrls() {
+  const t = Date.now();
+  return {
+    '공공데이터 제공': 'https://docs.google.com/spreadsheets/d/1EiAb2iiep8jiKtt4Wd0HPQlW4s7ssMm5/export?format=csv&gid=0&t=' + t,
+    '데이터기반행정':  'https://docs.google.com/spreadsheets/d/1EiAb2iiep8jiKtt4Wd0HPQlW4s7ssMm5/export?format=csv&gid=1&t=' + t
+  };
+}
 
 async function loadStatusFromSheets() {
   const statusMap = {};
   try {
-    for(const [track, url] of Object.entries(SHEET_URLS)) {
-      const res = await fetch(url);
+    for(const [track, url] of Object.entries(getSheetUrls())) {
+      const res = await fetch(url, { mode: 'cors', cache: 'no-store' });
       if(!res.ok) continue;
       const csv = await res.text();
       csv.split('\n').slice(1).forEach(row => {
@@ -592,8 +595,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('db-pn').textContent=ds.none;
 
   loadStatusFromSheets().then(ok => {
-    updateDashboard(); rebuildTable();
+    updateDashboard();
+    rebuildTable();
     if(ok) showToast('✅ 구글 시트에서 최신 현황 로드됨');
+  }).catch(() => {
+    updateDashboard();
+    rebuildTable();
   });
 
   const pc=typeCount(pd), dc=typeCount(db);
