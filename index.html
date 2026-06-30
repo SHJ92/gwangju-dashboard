@@ -464,8 +464,8 @@ function typeCount(groups){
 
 // ── Google Sheets 실시간 연동 ──────────────────────────────
 const SHEET_URLS = {
-  '공공데이터 제공': 'https://docs.google.com/spreadsheets/d/1W5rrZbGjE4idm8_TEitbMjJb-zYJTB_vO-GD1AepPWc/export?format=csv&gid=0',
-  '데이터기반행정':  'https://docs.google.com/spreadsheets/d/1W5rrZbGjE4idm8_TEitbMjJb-zYJTB_vO-GD1AepPWc/export?format=csv&gid=1'
+  '공공데이터 제공': 'https://docs.google.com/spreadsheets/d/1W5rrZbGjE4idm8_TEitbMjJb-zYJTB_vO-GD1AepPWc/export?format=csv&gid=168800007',
+  '데이터기반행정':  'https://docs.google.com/spreadsheets/d/1W5rrZbGjE4idm8_TEitbMjJb-zYJTB_vO-GD1AepPWc/export?format=csv&gid=1657125474'
 };
 
 async function loadStatusFromSheets() {
@@ -476,24 +476,47 @@ async function loadStatusFromSheets() {
       const res = await fetch(url + '&t=' + t, { mode:'cors', cache:'no-store' });
       if(!res.ok) continue;
       const csv = await res.text();
-      csv.split('\n').slice(1).forEach(row => {
-        const cols = row.split(',');
+      // CSV 파싱 - 큰따옴표 처리
+      const rows = csv.split('
+').slice(2); // 1행(제목), 2행(헤더) 건너뜀
+      rows.forEach(row => {
+        if(!row.trim()) return;
+        // CSV 컬럼 파싱 (따옴표 내 쉼표 처리)
+        const cols = [];
+        let cur = '', inQ = false;
+        for(let i=0; i<row.length; i++){
+          if(row[i]==='"') { inQ=!inQ; }
+          else if(row[i]===',' && !inQ) { cols.push(cur); cur=''; }
+          else { cur+=row[i]; }
+        }
+        cols.push(cur);
         if(cols.length < 6) return;
-        const no = cols[1].trim().replace(/^"|"$/g,'').replace(/^\s*[└\s]*/,'').trim();
-        const st = cols[5].trim().replace(/^"|"$/g,'').trim();
-        if(no && st && !no.startsWith('[') && no !== '지표번호') statusMap[no] = st;
+        const rawNo = cols[1].trim();
+        const st    = cols[5].trim();
+        // 세부지표(└ 포함)만 처리
+        if(!rawNo.includes('└')) return;
+        const no = rawNo.replace(/└/g,'').trim();
+        // 수식 제외, 유효한 상태값만
+        const validSt = ['이행','부분이행','미이행'];
+        if(no && validSt.includes(st)) statusMap[no] = st;
       });
     }
+    // DATA 업데이트
     Object.keys(DATA).forEach(track => {
       DATA[track].forEach(g => {
         g.subs.forEach(sub => {
-          const no = sub.no.replace(/\n/g,'').trim();
+          const no = sub.no.replace(/
+/g,'').trim();
           if(statusMap[no]) sub.status = statusMap[no];
         });
         const sts = g.subs.map(s=>s.status).filter(Boolean);
-        g.status = !sts.length?'미이행':sts.every(s=>s.includes('이행'))?'이행':sts.some(s=>s.includes('이행')||s.includes('부분'))?'부분이행':'미이행';
+        g.status = !sts.length?'미이행'
+          : sts.every(s=>s==='이행')?'이행'
+          : sts.every(s=>s==='미이행')?'미이행'
+          : '부분이행';
       });
     });
+    console.log('✅ 시트 연동:', Object.keys(statusMap).length+'개', statusMap);
     return Object.keys(statusMap).length > 0;
   } catch(e) { console.warn('시트 연동 실패:', e.message); return false; }
 }
