@@ -607,9 +607,9 @@ const PDF_B64 = 'JVBERi0xLjQKJaqrrK0KMTAgMCBvYmoKPDwgL1R5cGUgL1BhZ2UKL1BhcmVudCA
 let currentPage = 1;
 function openPdf(page, label) {
   currentPage = parseInt(page) || 1;
-  window.open('https://drive.google.com/file/d/1rsY7GXsAWcQXfDaTKWQTAZryXzrcg5-8/preview#page=' + currentPage, '_blank');
+  window.open('https://shj92.github.io/gwangju-dashboard/2026%EB%85%84%20%ED%8F%89%EA%B0%80%ED%8E%B8%EB%9E%8C.pdf#page=' + currentPage, '_blank');
 }
-function changePage(delta) { currentPage = Math.max(1, currentPage+delta); openPdf(currentPage,''); }
+function changePage(delta) { currentPage = Math.max(1, currentPage+delta); window.open('https://shj92.github.io/gwangju-dashboard/2026%EB%85%84%20%ED%8F%89%EA%B0%80%ED%8E%B8%EB%9E%8C.pdf#page=' + currentPage, '_blank'); }
 function closePdf() {}
 
 
