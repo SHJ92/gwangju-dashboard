@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 평가대응 대시보드 · 광주광역시 관광공사</title>
+<title>2026년 공공데이터 제공 및 데이터기반행정 평가 대응 현황 대시보드 · 광주광역시 관광공사</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -148,10 +148,9 @@ body.pdf-open .page{max-width:51%;transition:max-width .3s ease}
 
 <div class="topbar">
   <div>
-    <div class="page-title">2026 공공데이터 및 데이터기반행정 평가 대응 현황</div>
-    <div class="page-sub">광주광역시 관광공사 · 지방공기업 A기관 · 평가편람 19개 공식지표 기준 · <span id="today-date">기준일: 2026.06.30</span></div>
+    <div class="page-title">2026년 공공데이터 제공 및 데이터기반행정 평가 대응 현황 대시보드</div>
+    <div class="page-sub">광주광역시 관광공사 · 지방공기업 A기관 · 평가편람 19개 공식지표 기준 · <span id="today-date"><span id="today-date">기준일: 2026.06.30</span></span></div>
   </div>
-  <div class="dday"><i class="ti ti-clock"></i> D-15 · 7월 15일 마감</div>
 </div>
 
 <div class="kpi-row">
@@ -256,7 +255,7 @@ body.pdf-open .page{max-width:51%;transition:max-width .3s ease}
   <div id="tbl-db" class="ind-wrap" style="display:none"></div>
 </div>
 
-<div class="footer">2026 공공데이터 및 데이터기반행정 평가 대응 · 광주광역시 관광공사 · 평가편람 19개 공식지표 기준</div>
+<div class="footer">2026년 공공데이터 제공 및 데이터기반행정 평가 대응 현황 대시보드 · 광주광역시 관광공사 · 평가편람 19개 공식지표 기준</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -314,7 +313,7 @@ function buildTable(groups, prefix, isDb){
       <div class="ind-no">${g.no}</div>
       <div class="ind-name">${g.name}</div>
       <div style="text-align:center">${TAGS[g.type]||g.type}</div>
-      <div class="ind-score">${g.score}점</div>
+      <div class="ind-score">${g.score.toString().includes('점') ? g.score : g.score+'점'}</div>
       <div><span class="st ${stCls(g.status)}"><span class="sd"></span>${stLbl(g.status)}</span></div>
       <div class="chev"><i class="ti ti-chevron-down"></i></div>
     </div>
