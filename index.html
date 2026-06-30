@@ -149,7 +149,7 @@ body.pdf-open .page{max-width:51%;transition:max-width .3s ease}
 <div class="topbar">
   <div>
     <div class="page-title">2026 공공데이터 및 데이터기반행정 평가 대응 현황</div>
-    <div class="page-sub">광주광역시 관광공사 · 지방공기업 A기관 · 평가편람 19개 공식지표 기준 · 기준일: 2026.06.30</div>
+    <div class="page-sub">광주광역시 관광공사 · 지방공기업 A기관 · 평가편람 19개 공식지표 기준 · <span id="today-date">기준일: 2026.06.30</span></div>
   </div>
   <div class="dday"><i class="ti ti-clock"></i> D-15 · 7월 15일 마감</div>
 </div>
@@ -575,6 +575,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadStatusFromSheets().then(ok => {
     if(ok){ updateKPI(); rebuildTbl(); showToast('✅ 구글 시트에서 최신 현황 로드됨'); }
   }).catch(()=>{});
+
+
+  // 기준일 오늘 날짜로 업데이트
+  const today = new Date();
+  const dateStr = today.getFullYear() + '.' +
+    String(today.getMonth()+1).padStart(2,'0') + '.' +
+    String(today.getDate()).padStart(2,'0');
+  const el = document.getElementById('today-date');
+  if(el) el.textContent = '기준일: ' + dateStr;
 
   const pc=typeCount(pd), dc=typeCount(db);
   new Chart(document.getElementById('typeChart'),{
