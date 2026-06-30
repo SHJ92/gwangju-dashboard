@@ -137,6 +137,12 @@
   .fbtn:hover{background:#f5f5f0}
   .fbtn.on{background:var(--accent-soft);border-color:#b5d4f4;color:#1565c0;font-weight:500}
   .fsep{width:1px;background:var(--line);margin:2px 4px}
+  .tabs{display:flex;gap:8px}
+  .tab{font-size:13px;font-weight:600;color:var(--muted);background:#fff;border:0.5px solid var(--line);
+    border-radius:9px;padding:8px 16px;cursor:pointer;transition:all .15s}
+  .tab:hover{background:#f5f5f0}
+  .tab.on-pd.on{background:var(--blue-bg);border-color:#b5d4f4;color:#185fa5}
+  .tab.on-db.on{background:var(--green-bg);border-color:#bfe0a0;color:#3b6d11}
   table{width:100%;border-collapse:collapse;font-size:13px}
   thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:400;
     text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap}
@@ -221,7 +227,6 @@
     <div class="chips">
       <div class="chip"><div class="k">공공데이터 확보</div><div class="v num"><span id="c-pub">0</span><small>/ 100</small></div></div>
       <div class="chip"><div class="k">데이터기반행정 확보</div><div class="v num"><span id="c-adm">0</span><small>/ 100</small></div></div>
-      <div class="chip dday"><div class="k">실적인정 마감</div><div class="v num">D-<span id="c-dday">0</span></div></div>
     </div>
   </div>
 </header>
@@ -266,17 +271,11 @@
   <div class="panel tbl-card">
     <div class="tbl-head">
       <div>
-        <h2><span class="ix">전체</span>지표 추진현황</h2>
+        <h2><span class="ix">현황</span>지표 추진현황</h2>
       </div>
-      <div class="filters" id="filters">
-        <button class="fbtn on" data-f="field" data-v="all">전체 분야</button>
-        <button class="fbtn" data-f="field" data-v="공공데이터">공공데이터</button>
-        <button class="fbtn" data-f="field" data-v="데이터기반행정">데이터기반행정</button>
-        <div class="fsep"></div>
-        <button class="fbtn on" data-f="status" data-v="all">전체 상태</button>
-        <button class="fbtn" data-f="status" data-v="secured">이행</button>
-        <button class="fbtn" data-f="status" data-v="partial">부분이행</button>
-        <button class="fbtn" data-f="status" data-v="risk">미이행</button>
+      <div class="tabs" id="tabs">
+        <button class="tab on-pd on" data-field="공공데이터">공공데이터 제공</button>
+        <button class="tab on-db" data-field="데이터기반행정">데이터기반행정</button>
       </div>
     </div>
     <table>
@@ -294,17 +293,6 @@
     </table>
   </div>
 
-  <div class="foot">
-    <div class="fcard"><div class="ttl">실적인정 마감</div><div class="dt num">09 / 30</div><div class="ds">대다수 정성·실적 지표 (’25.11 ~ ’26.9.30)</div></div>
-    <div class="fcard"><div class="ttl">등록·승인 마감</div><div class="dt num">10 / 16</div><div class="ds">개방계획·실적 시스템 등록·승인 완료</div></div>
-    <div class="fcard"><div class="ttl">개방이행 신청</div><div class="dt num">10 / 06</div><div class="ds">공공데이터 개방이행 결과등록 신청</div></div>
-    <div class="fcard"><div class="ttl">메타 등록 기준</div><div class="dt num">03 / 31</div><div class="ds">메타관리시스템 등록 테이블 기준일</div></div>
-  </div>
-
-  <div class="srcline">
-    출처 · 2026_평가대응_추진현황_최종.xlsx (현황) + <a href="2026년 평가편람.pdf" target="_blank" rel="noopener">2026년 평가편람.pdf</a> (배점·기한·적용기준)<br>
-    1-1은 ‘중장기 개방계획 미제출/신규 평가대상 기관’ 적용 지표(편람 ①-3·④)로, 1-1-1·1-1-2(제출기관)는 미적용입니다.
-  </div>
 </div>
 
 
@@ -399,7 +387,36 @@ const DETAIL = {
   "5-1(공)":{page:84,method:"공공데이터 정책 추진을 위한 기반 조성(시행계획 제출, 인력·조직 운영)을 정량 평가. 3점.",submit:"별도 제출 불필요 — 행안부에 공문 제출한 시행계획(한글·엑셀 양식 모두)으로 평가. 보고서는 [첨부13] PDF."},
   "5-2(공)":{page:86,method:"공공데이터 제공·운영, 데이터 품질 등 관련 교육 수강 여부를 정량 평가. 2점.",submit:"관련 교육 수강 이력으로 평가(시스템 집계)."},
   "5-1(행)":{page:87,method:"데이터기반행정 정책 추진을 위한 기반 조성(조직·인력 운영, 시행계획·기본계획 수립·제출)을 정량 평가. A기관 3점.",submit:"평가시스템에 조직·인력 운영, 계획 수립·제출 관련 자료 제출."},
-  "5-2(행)":{page:89,method:"기관장 주재 보고회·점검회의 등 데이터기반행정 활성화를 위한 기관장 리더십·추진 실적을 정량 평가. 3점.",submit:"평가시스템에 기관장 주재 활동 실적 자료 제출."}
+  "5-2(행)":{page:89,method:"기관장 주재 보고회·점검회의 등 데이터기반행정 활성화를 위한 기관장 리더십·추진 실적을 정량 평가. 3점.",submit:"평가시스템에 기관장 주재 활동 실적 자료 제출."},
+  // ── 하위 세부항목(각 항목 고유 페이지) ──
+  "1-3-1":{page:22,method:"공공데이터 제공신청에 대한 적기(법정기한 내) 처리율을 정량 평가. 2점.",submit:"목록등록관리시스템·행안부 보유자료 집계 — 별도 제출 불필요."},
+  "1-3-2":{page:23,method:"개방 파일데이터의 제공주기 정의 및 주기 준수율을 정량 평가. 3점.",submit:"목록등록관리시스템 집계 — 별도 제출 불필요."},
+  "1-3-3":{page:24,method:"오류신고·문의에 대한 적기 처리율을 정량 평가. 1점.",submit:"행안부 보유자료 집계 — 별도 제출 불필요."},
+  "1-3-4":{page:24,method:"민간 중복·유사서비스 정비 대상 중 미수행 시 건당 1점 감점(누적 적용).",submit:"정비 이행 여부로 판단 — 별도 제출 불필요."},
+  "1-3-5":{page:24,method:"공공데이터 심의·조정위원회 권고 불수용 1건당 1점 감점.",submit:"위원회 권고 이행 여부로 판단 — 별도 제출 불필요."},
+  "1-4-1":{page:25,method:"활용성 진단 서비스 기준값(키워드·데이터 설명 등) 달성도를 정량 평가. 5점.",submit:"목록등록관리시스템 내 활용성 진단서비스 자료 집계 — 별도 제출 불필요."},
+  "1-4-2":{page:27,method:"개방 데이터의 민간 활용 성과를 정성 평가. 7점(인정기간 ’25.11.15~’26.9.30).",submit:"품질·표준관리 통합시스템에 민간 활용 성과보고서([첨부3] 2p, PDF) + 증빙자료 제출."},
+  "1-4-3":{page:29,method:"기관이 직접 수행한 공공데이터 활용 지원 노력·성과를 정량+정성 평가. 10점.",submit:"품질·표준관리 통합시스템에 활용지원 성과보고서([첨부4] 6p, PDF) + 증빙(50p 이내 PDF) 제출."},
+  "2-1-1":{page:33,method:"평가대상 DB 선정·관리 적정성을 정량 평가. 3점(개방데이터 원천 DB 필수 선정).",submit:"품질·표준관리 통합시스템(평가시스템)에 대상 DB 관련 자료 제출."},
+  "2-1-2":{page:35,method:"제안요청서 품질요건 반영·사업 산출물 등 예방적 품질관리를 정량 평가. 4점.",submit:"평가시스템에 제안요청서·산출물 등 증빙 제출."},
+  "2-1-3":{page:37,method:"공통표준용어·표준단어 등 데이터 표준 준수 수준을 정량 평가. 6점.",submit:"평가시스템에 표준관리 진단 자료 제출."},
+  "2-1-4":{page:41,method:"데이터 구조(테이블·컬럼 정의 등) 관리 수준을 정량 평가. 2점.",submit:"평가시스템에 구조관리 진단 자료 제출."},
+  "2-1-5":{page:43,method:"데이터 연계·참조무결성 등 연계관리 수준을 정량 평가. 2점.",submit:"평가시스템에 연계관리 진단 자료 제출."},
+  "2-2-1":{page:45,method:"진단대상 컬럼에 업무규칙(최대 20개)을 설정해 품질진단 수행 수준을 정량 평가. 8점.",submit:"평가시스템에 품질진단 업무규칙·결과 자료 제출."},
+  "2-2-2":{page:47,method:"진단 결과 데이터 오류율을 정량 평가. 10점(기준 0.001%).",submit:"평가시스템에 오류율 산정 자료 제출."},
+  "3-1-1":{page:54,method:"데이터 수집·결합·분석 결과 도출 및 정책활용 실적을 정량 평가. A기관 10점.",submit:"범정부 데이터분석시스템(insight.go.kr)에 분석 실적 제출."},
+  "3-1-2":{page:57,method:"분석 결과의 정책활용 노력·성과를 정성 평가. A기관 15점.",submit:"품질·표준관리 통합시스템(평가시스템)에 성과보고서 제출."},
+  "3-2-1":{page:59,method:"전 직원 대상 AI·데이터 분석 교육 이수 실적을 정량 평가. 5점.",submit:"평가시스템에 교육 이수 실적 자료 제출."},
+  "3-2-2":{page:61,method:"AI·데이터 분석 전문가 양성 실적을 정량 평가. 5점.",submit:"평가시스템에 전문가 양성 실적 자료 제출."},
+  "3-3-1":{page:65,method:"데이터 분석·활용역량 진단 실시 여부·결과를 정량 평가. 2점.",submit:"평가시스템에 역량진단 실시·결과 분석보고서 제출(증빙 1개 PDF)."},
+  "3-3-2":{page:67,method:"AI 도입·활용을 통한 업무혁신·서비스 제고 노력을 정성 평가. A기관 8점.",submit:"평가시스템에 AI 도입·활용 보고서([첨부7]) + 증빙자료 제출."},
+  "3-3-3":{page:69,method:"데이터기반행정 활성화를 위한 다양한 시책 노력을 정성 평가. 8점.",submit:"평가시스템에 다양한 노력 보고서([첨부8]) + 증빙자료 제출."},
+  "4-1-1":{page:72,method:"메타관리시스템 기반 데이터 공유 실적을 정량 평가. 8점.",submit:"기관공유데이터 관리시스템(추후 공문 안내)에 공유 실적 등록."},
+  "4-1-2":{page:74,method:"AI 친화적 행정문서 데이터 공유 실적을 정량 평가. 7점(4-1-1과 중복 불가).",submit:"기관공유데이터 관리시스템(추후 공문 안내)에 행정문서 데이터 등록."},
+  "5-1-1(공)":{page:84,method:"’26년 공공데이터 시행계획 제출 여부를 정량 평가. 1점.",submit:"행안부에 공문 제출한 시행계획(한글·엑셀 양식 모두)으로 평가."},
+  "5-1-2(공)":{page:85,method:"공공데이터 제공 관련 전담 인력·조직(전담부서 지정) 운영 여부를 정량 평가. 2점.",submit:"품질·표준관리 통합시스템에 직제시행규칙·조례 등 전담부서 지정 증빙 제출."},
+  "5-1-1(행)":{page:87,method:"데이터기반행정 관련 조직·인력 운영 여부를 정량 평가. 2점.",submit:"평가시스템에 조직·인력 운영 증빙 제출."},
+  "5-1-2(행)":{page:88,method:"’26년 활성화 시행계획 및 제3차 기본계획 수립·제출 여부를 정량 평가. 1점.",submit:"시행계획·기본계획 제출 양식(한글+엑셀)을 모두 제출."}
 };
 function detailKey(num){
   if(DETAIL[num]) return num;
@@ -409,6 +426,11 @@ function detailKey(num){
   base=base.replace(/-[0-9]+$/,"");
   const k=base+suf;
   return DETAIL[k]?k:null;
+}
+// 지표번호 구조로 계층 판정: 3단(예: 1-1-3, 5-1-1(공))=하위항목, 2단(예: 1-2, 2-3)=상위지표
+function isSub(num){
+  const base=num.replace(/\((공|행)\)$/,"");
+  return (base.match(/-/g)||[]).length>=2;
 }
 const leaves = DATA.filter(d=>!d.parent);
 const baseLeaves = leaves.filter(d=>d.kind==="base");
@@ -424,12 +446,9 @@ const fieldStat = f=>{
 const pub=fieldStat("공공데이터"), adm=fieldStat("데이터기반행정");
 const secured=pub.sec+adm.sec, partial=pub.par+adm.par, risk=pub.risk+adm.risk, TOTAL=200;
 
-const today=new Date(2026,6,1), deadline=new Date(2026,8,30);
-const dday=Math.round((deadline-today)/86400000);
-
 // ---- header / rail ----
 const setText=(id,v)=>document.getElementById(id).textContent=v;
-setText("c-pub",pub.sec); setText("c-adm",adm.sec); setText("c-dday",dday);
+setText("c-pub",pub.sec); setText("c-adm",adm.sec);
 setText("r-secured",secured+"점"); setText("r-risk",(risk)+"점");
 requestAnimationFrame(()=>{
   document.getElementById("rs-sec").style.width=(secured/TOTAL*100)+"%";
@@ -482,7 +501,7 @@ document.getElementById("donut-leg").innerHTML=["secured","partial","risk"].map(
   <span class="lp">${(cnt[k]/totalN*100).toFixed(0)}%</span></div>`).join("");
 
 // ---- table ----
-let filt={field:"all",status:"all"}, sortK="num", sortDir=1;
+let filt={field:"공공데이터",status:"all"}, sortK="num", sortDir=1;
 function statusPill(s){return `<span class="pill s-${s}">${ST[s].ko}</span>`;}
 function render(){
   let rows=DATA.filter(d=>(filt.field==="all"||d.field===filt.field)&&(filt.status==="all"||d.status===filt.status));
@@ -508,7 +527,7 @@ function render(){
         </div>
         <a class="pbtn" href="${href}" target="_blank" rel="noopener"><i class="ti ti-book-2"></i>평가편람 ${det?det.page+"쪽":""} 바로 열기</a>
       </div></td></tr>`;
-    return `<tr class="${d.parent?"parent":"child"} rowhead" data-i="${ri}">
+    return `<tr class="${isSub(d.num)?"child":"parent"} rowhead" data-i="${ri}">
       <td class="num">${d.num}</td>
       <td class="nm"><span class="exp"><i class="ti ti-chevron-right"></i></span>${d.name}${kindBadge}</td>
       <td class="c col-hide"><span class="ty-badge">${d.type}</span></td>
@@ -524,10 +543,10 @@ document.getElementById("tbody").addEventListener("click",e=>{
   if(dr.hasAttribute("hidden")){dr.removeAttribute("hidden");tr.classList.add("open");}
   else{dr.setAttribute("hidden","");tr.classList.remove("open");}
 });
-document.getElementById("filters").addEventListener("click",e=>{
-  const b=e.target.closest(".fbtn"); if(!b)return;
-  filt[b.dataset.f]=b.dataset.v;
-  document.querySelectorAll(`.fbtn[data-f="${b.dataset.f}"]`).forEach(x=>x.classList.toggle("on",x===b));
+document.getElementById("tabs").addEventListener("click",e=>{
+  const b=e.target.closest(".tab"); if(!b)return;
+  filt.field=b.dataset.field;
+  document.querySelectorAll("#tabs .tab").forEach(x=>x.classList.toggle("on",x===b));
   render();
 });
 document.querySelectorAll("thead th").forEach(th=>{
