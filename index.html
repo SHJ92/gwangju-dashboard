@@ -612,6 +612,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       <span>2026 공공데이터 및 데이터기반행정 평가편람</span>
     </div>
     <span class="pdf-page-badge" id="pdfPageBadge">-</span>
+    <button onclick="window.open('https://drive.google.com/file/d/1rsY7GXsAWcQXfDaTKWQTAZryXzrcg5-8/view','_blank')" style="background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:11px;padding:4px 8px;border-radius:5px;cursor:pointer;margin-right:4px">새 탭으로 열기</button>
     <button class="pdf-close" onclick="closePdf()" title="닫기">✕</button>
   </div>
   <iframe class="pdf-iframe" id="pdfFrame" src="" title="평가편람" allow="autoplay" style="flex:1;border:none;width:100%;"></iframe>
@@ -640,40 +641,20 @@ let pdfLoaded   = false;
 
 async function openPdf(page, label) {
   currentPage = parseInt(page) || 1;
-
+  // 구글 드라이브 새 탭으로 열기
+  const url = `https://drive.google.com/file/d/1rsY7GXsAWcQXfDaTKWQTAZryXzrcg5-8/preview#page=${currentPage}`;
+  
+  // 오버레이 패널 표시
   const overlay = document.getElementById('pdfOverlay');
+  const frame   = document.getElementById('pdfFrame');
   overlay.classList.add('open');
   document.body.classList.add('pdf-open');
-
+  frame.src = url;
+  
   document.getElementById('pdfPageBadge').textContent = label || ('p.' + currentPage);
-
-  if(!pdfLoaded) {
-    document.getElementById('pdfCanvasWrap').innerHTML =
-      '<div class="pdf-loading">편람을 불러오는 중...<br><small>처음 열 때 잠시 시간이 걸립니다</small></div>';
-    await initPdf();
-  }
-
-  await renderPage(currentPage);
+  document.getElementById('pdfNavInfo').textContent   = label || ('p.' + currentPage);
+  document.getElementById('prevBtn').disabled = currentPage <= 1;
+  document.getElementById('nextBtn').disabled = false;
 }
 
-async function changePage(delta) {
-  const next = currentPage + delta;
-  if(next < 1 || next > totalPages) return;
-  currentPage = next;
-  await renderPage(currentPage);
-}
-
-function closePdf() {
-  document.getElementById('pdfOverlay').classList.remove('open');
-  document.body.classList.remove('pdf-open');
-}
-
-function parsePage(p) {
-  // 편람 표시 페이지 + 6 = PDF 실제 페이지
-  if(!p) return 1;
-  const m = p.match(/(\d+)/);
-  return m ? parseInt(m[1]) + 6 : 1;
-}
-</script>
-</body>
-</html>
+>
